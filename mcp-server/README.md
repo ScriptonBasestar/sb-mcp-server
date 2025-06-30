@@ -26,11 +26,11 @@ A Model Context Protocol (MCP) server that provides document schema validation a
 
 ```bash
 # Run the MCP server directly
-npx @archmagece/document-schema-mcp-server
+npx @scriptonbasestar/sb-schema-mcp-server
 
 # Or install globally
-npm install -g @archmagece/document-schema-mcp-server
-document-schema-mcp-server
+npm install -g @scriptonbasestar/sb-schema-mcp-server
+sb-schema-mcp-server
 ```
 
 ### Local Development
@@ -70,16 +70,16 @@ The server provides 9 tools for various document and template operations:
 
 ```bash
 # List all available gitignore templates
-echo '{"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": "list_gitignore_templates", "arguments": {}}}' | npx @archmagece/document-schema-mcp-server
+echo '{"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": "list_gitignore_templates", "arguments": {}}}' | npx @scriptonbasestar/sb-schema-mcp-server
 
 # Generate a Node.js .gitignore file
-echo '{"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": "generate_gitignore", "arguments": {"gitignore_type": "Node", "output_path": ".gitignore"}}}' | npx @archmagece/document-schema-mcp-server
+echo '{"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": "generate_gitignore", "arguments": {"gitignore_type": "Node", "output_path": ".gitignore"}}}' | npx @scriptonbasestar/sb-schema-mcp-server
 
 # Generate MIT license
-echo '{"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": "generate_license", "arguments": {"license_type": "mit", "author": "Your Name", "output_path": "LICENSE"}}}' | npx @archmagece/document-schema-mcp-server
+echo '{"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": "generate_license", "arguments": {"license_type": "mit", "author": "Your Name", "output_path": "LICENSE"}}}' | npx @scriptonbasestar/sb-schema-mcp-server
 
 # Validate a README document
-echo '{"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": "validate_document", "arguments": {"content": "# My Project\n\n## Installation\n\n## Usage", "schema_type": "readme"}}}' | npx @archmagece/document-schema-mcp-server
+echo '{"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": "validate_document", "arguments": {"content": "# My Project\n\n## Installation\n\n## Usage", "schema_type": "readme"}}}' | npx @scriptonbasestar/sb-schema-mcp-server
 ```
 
 ### Integration with Claude Desktop
@@ -89,9 +89,9 @@ Add to your MCP settings (`~/Library/Application Support/Claude/claude_desktop_c
 ```json
 {
   "mcpServers": {
-    "document-schema-server": {
+    "sb-schema-server": {
       "command": "npx",
-      "args": ["@archmagece/document-schema-mcp-server"]
+      "args": ["@scriptonbasestar/sb-schema-mcp-server"]
     }
   }
 }

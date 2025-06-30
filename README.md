@@ -15,16 +15,16 @@ A comprehensive collection of document schemas for standardizing project documen
 
 ```bash
 # Install and run the MCP server globally
-npx @archmagece/document-schema-mcp-server
+npx @scriptonbasestar/sb-schema-mcp-server
 
 # Generate a MIT license
-echo '{"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": "generate_license", "arguments": {"license_type": "mit", "author": "Your Name", "output_path": "LICENSE"}}}' | npx @archmagece/document-schema-mcp-server
+echo '{"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": "generate_license", "arguments": {"license_type": "mit", "author": "Your Name", "output_path": "LICENSE"}}}' | npx @scriptonbasestar/sb-schema-mcp-server
 
 # Generate a Node.js .gitignore
-echo '{"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": "generate_gitignore", "arguments": {"gitignore_type": "Node", "output_path": ".gitignore"}}}' | npx @archmagece/document-schema-mcp-server
+echo '{"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": "generate_gitignore", "arguments": {"gitignore_type": "Node", "output_path": ".gitignore"}}}' | npx @scriptonbasestar/sb-schema-mcp-server
 
 # List all available templates
-echo '{"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": "list_templates", "arguments": {}}}' | npx @archmagece/document-schema-mcp-server
+echo '{"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": "list_templates", "arguments": {}}}' | npx @scriptonbasestar/sb-schema-mcp-server
 ```
 
 ## 📋 GitHub API Integration
@@ -67,10 +67,10 @@ Use our Model Context Protocol server with 9 powerful tools:
 #### 🔧 Installation Options
 ```bash
 # Option 1: NPX (Recommended)
-npx @archmagece/document-schema-mcp-server
+npx @scriptonbasestar/sb-schema-mcp-server
 
 # Option 2: Global Installation
-npm install -g @archmagece/document-schema-mcp-server
+npm install -g @scriptonbasestar/sb-schema-mcp-server
 document-schema-mcp-server
 
 # Option 3: Local Development
@@ -103,9 +103,9 @@ Add to your MCP settings (`claude_desktop_config.json`):
 ```json
 {
   "mcpServers": {
-    "document-schema-server": {
+    "sb-schema-server": {
       "command": "npx",
-      "args": ["@archmagece/document-schema-mcp-server"]
+      "args": ["@scriptonbasestar/sb-schema-mcp-server"]
     }
   }
 }
@@ -133,11 +133,11 @@ mcp-schema-specs/
 
 ## 📦 NPM Package
 
-The MCP server is published as `@archmagece/document-schema-mcp-server`:
+The MCP server is published as `@scriptonbasestar/sb-schema-mcp-server`:
 
-- **NPX Usage**: `npx @archmagece/document-schema-mcp-server`
-- **Global Install**: `npm install -g @archmagece/document-schema-mcp-server`
-- **Package URL**: https://www.npmjs.com/package/@archmagece/document-schema-mcp-server
+- **NPX Usage**: `npx @scriptonbasestar/sb-schema-mcp-server`
+- **Global Install**: `npm install -g @scriptonbasestar/sb-schema-mcp-server`
+- **Package URL**: https://www.npmjs.com/package/@scriptonbasestar/sb-schema-mcp-server
 
 ## 🤝 Contributing
 

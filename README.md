@@ -2,6 +2,14 @@
 
 A comprehensive collection of document schemas for standardizing project documentation across different types of software projects.
 
+## 리소스
+
+- docs: ./schemas/docs/*
+- gitignore: https://github.com/orgs/github/gitignore
+- license: https://github.com/licenses/license-templates
+- 
+
+
 ## 📋 Features
 
 - **Comprehensive Schema Collection** - 11 different document schemas covering all aspects of project documentation

@@ -11,7 +11,7 @@ const __dirname = dirname(__filename);
 
 // Get the project root directory (parent of mcp-server)
 const PROJECT_ROOT = resolve(__dirname, '../../');
-const SCHEMAS_DIR = join(PROJECT_ROOT, 'schemas');
+const SCHEMAS_DIR = join(PROJECT_ROOT, 'schemas', 'docs');
 
 // Define schema types
 const SCHEMA_TYPES = [

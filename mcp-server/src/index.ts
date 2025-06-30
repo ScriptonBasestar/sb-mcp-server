@@ -52,7 +52,64 @@ function readLicenseTemplate(licenseType: LicenseType): string {
   return readFileSync(licensePath, 'utf-8');
 }
 
-// Helper function to read gitignore templates
+// Helper function to fetch gitignore from GitHub API
+async function fetchGitignoreFromGitHub(gitignoreType: string): Promise<string> {
+  try {
+    const response = await fetch(`https://api.github.com/gitignore/templates/${gitignoreType}`);
+    if (!response.ok) {
+      throw new Error(`GitHub API error: ${response.status} ${response.statusText}`);
+    }
+    const data = await response.json();
+    return data.source;
+  } catch (error) {
+    throw new Error(`Failed to fetch gitignore from GitHub: ${error instanceof Error ? error.message : 'Unknown error'}`);
+  }
+}
+
+// Helper function to get available gitignore templates from GitHub
+async function getAvailableGitignoreTemplates(): Promise<string[]> {
+  try {
+    const response = await fetch('https://api.github.com/gitignore/templates');
+    if (!response.ok) {
+      throw new Error(`GitHub API error: ${response.status} ${response.statusText}`);
+    }
+    return await response.json();
+  } catch (error) {
+    // Fallback to predefined list
+    return ['Node', 'Python', 'Go', 'Java', 'Rust', 'C++', 'C', 'TypeScript'];
+  }
+}
+
+// License GitHub API helper functions
+async function fetchLicenseFromGitHub(licenseType: string): Promise<string> {
+  try {
+    const response = await fetch(`https://raw.githubusercontent.com/licenses/license-templates/master/templates/${licenseType}.txt`);
+    if (!response.ok) {
+      throw new Error(`GitHub API error: ${response.status} ${response.statusText}`);
+    }
+    return await response.text();
+  } catch (error) {
+    throw new Error(`Failed to fetch license from GitHub: ${error instanceof Error ? error.message : 'Unknown error'}`);
+  }
+}
+
+async function getAvailableLicenseTemplates(): Promise<string[]> {
+  try {
+    const response = await fetch('https://api.github.com/repos/licenses/license-templates/contents/templates');
+    if (!response.ok) {
+      throw new Error(`GitHub API error: ${response.status} ${response.statusText}`);
+    }
+    const files = await response.json();
+    return files
+      .filter((file: any) => file.name.endsWith('.txt'))
+      .map((file: any) => file.name.replace('.txt', ''));
+  } catch (error) {
+    // Fallback to predefined list
+    return ['MIT', 'Apache-2.0', 'GPL-3.0', 'BSD-2-Clause', 'BSD-3-Clause', 'LGPL-2.1', 'LGPL-3.0', 'MPL-2.0'];
+  }
+}
+
+// Helper function to read gitignore templates (fallback to local files)
 function readGitignoreTemplate(gitignoreType: GitignoreType): string {
   const gitignorePath = join(GITIGNORE_DIR, `${gitignoreType}.gitignore`);
   if (!existsSync(gitignorePath)) {
@@ -387,18 +444,53 @@ server.tool(
   }
 );
 
-// Tool: Generate License
+// Tool: Generate License (with GitHub API support)
 server.tool(
   "generate_license",
   {
-    license_type: z.enum(LICENSE_TYPES).describe("Type of license to generate"),
+    license_type: z.string().describe("Type of license to generate (e.g., 'MIT', 'Apache-2.0', 'GPL-3.0', etc.)"),
     author: z.string().describe("Author name for the license"),
     year: z.number().optional().describe("Copyright year (defaults to current year)"),
     output_path: z.string().optional().describe("Optional output file path"),
+    use_github_api: z.boolean().optional().default(true).describe("Whether to fetch from GitHub API (default: true)"),
   },
-  async ({ license_type, author, year, output_path }) => {
+  async ({ license_type, author, year, output_path, use_github_api }) => {
     try {
-      const license = generateLicense(license_type, author, year);
+      let licenseTemplate: string;
+      let source = "local template";
+      
+      if (use_github_api) {
+        try {
+          licenseTemplate = await fetchLicenseFromGitHub(license_type);
+          source = "GitHub API";
+        } catch (error) {
+          // Fallback to local template if GitHub API fails
+          console.error('GitHub API failed, falling back to local template:', error);
+          if (LICENSE_TYPES.includes(license_type as LicenseType)) {
+            licenseTemplate = readLicenseTemplate(license_type as LicenseType);
+            source = "local template (GitHub API failed)";
+          } else {
+            throw new Error(`Template '${license_type}' not available locally and GitHub API failed`);
+          }
+        }
+      } else {
+        if (LICENSE_TYPES.includes(license_type as LicenseType)) {
+          licenseTemplate = readLicenseTemplate(license_type as LicenseType);
+        } else {
+          throw new Error(`Local template for '${license_type}' not found. Try using GitHub API instead.`);
+        }
+      }
+      
+      // Replace template variables
+      const currentYear = year || new Date().getFullYear();
+      const license = licenseTemplate
+        .replace(/\{\{year\}\}/g, currentYear.toString())
+        .replace(/\{\{author\}\}/g, author)
+        .replace(/\[year\]/g, currentYear.toString())
+        .replace(/\[fullname\]/g, author)
+        .replace(/\[name of copyright owner\]/g, author)
+        .replace(/Copyright \(c\) \[yyyy\]/g, `Copyright (c) ${currentYear}`)
+        .replace(/Copyright \[yyyy\]/g, `Copyright ${currentYear}`);
       
       if (output_path) {
         writeFileSync(output_path, license, 'utf-8');
@@ -406,7 +498,7 @@ server.tool(
           content: [
             {
               type: "text",
-              text: `✅ ${license_type} license generated and saved to: ${output_path}`,
+              text: `✅ ${license_type} license generated and saved to: ${output_path} (source: ${source})`,
             },
           ],
         };
@@ -434,16 +526,40 @@ server.tool(
   }
 );
 
-// Tool: Generate Gitignore
+// Tool: Generate Gitignore (with GitHub API support)
 server.tool(
   "generate_gitignore",
   {
-    gitignore_type: z.enum(GITIGNORE_TYPES).describe("Type of gitignore to generate"),
+    gitignore_type: z.string().describe("Type of gitignore to generate (e.g., 'Node', 'Python', 'Go', 'Java', etc.)"),
     output_path: z.string().optional().describe("Optional output file path"),
+    use_github_api: z.boolean().optional().default(true).describe("Whether to fetch from GitHub API (default: true)"),
   },
-  async ({ gitignore_type, output_path }) => {
+  async ({ gitignore_type, output_path, use_github_api }) => {
     try {
-      const gitignore = readGitignoreTemplate(gitignore_type);
+      let gitignore: string;
+      let source = "local template";
+      
+      if (use_github_api) {
+        try {
+          gitignore = await fetchGitignoreFromGitHub(gitignore_type);
+          source = "GitHub API";
+        } catch (error) {
+          // Fallback to local template if GitHub API fails
+          console.error('GitHub API failed, falling back to local template:', error);
+          if (GITIGNORE_TYPES.includes(gitignore_type as GitignoreType)) {
+            gitignore = readGitignoreTemplate(gitignore_type as GitignoreType);
+            source = "local template (GitHub API failed)";
+          } else {
+            throw new Error(`Template '${gitignore_type}' not available locally and GitHub API failed`);
+          }
+        }
+      } else {
+        if (GITIGNORE_TYPES.includes(gitignore_type as GitignoreType)) {
+          gitignore = readGitignoreTemplate(gitignore_type as GitignoreType);
+        } else {
+          throw new Error(`Local template for '${gitignore_type}' not found. Try using GitHub API instead.`);
+        }
+      }
       
       if (output_path) {
         writeFileSync(output_path, gitignore, 'utf-8');
@@ -451,7 +567,7 @@ server.tool(
           content: [
             {
               type: "text",
-              text: `✅ ${gitignore_type} .gitignore generated and saved to: ${output_path}`,
+              text: `✅ ${gitignore_type} .gitignore generated and saved to: ${output_path} (source: ${source})`,
             },
           ],
         };
@@ -479,27 +595,99 @@ server.tool(
   }
 );
 
+// Tool: List Available License Templates from GitHub
+server.tool(
+  "list_license_templates",
+  {},
+  async () => {
+    try {
+      const githubTemplates = await getAvailableLicenseTemplates();
+      
+      return {
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify({
+              availableLicenseTemplates: githubTemplates,
+              totalTemplates: githubTemplates.length,
+              source: "GitHub API",
+              usage: "Use any of these names with the generate_license tool"
+            }, null, 2),
+          },
+        ],
+      };
+    } catch (error) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: `Error fetching GitHub license templates: ${error instanceof Error ? error.message : 'Unknown error'}`,
+          },
+        ],
+        isError: true,
+      };
+    }
+  }
+);
+
+// Tool: List Available GitIgnore Templates from GitHub
+server.tool(
+  "list_gitignore_templates",
+  {},
+  async () => {
+    try {
+      const githubTemplates = await getAvailableGitignoreTemplates();
+      
+      return {
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify({
+              availableGitignoreTemplates: githubTemplates,
+              totalTemplates: githubTemplates.length,
+              source: "GitHub API",
+              usage: "Use any of these names with the generate_gitignore tool"
+            }, null, 2),
+          },
+        ],
+      };
+    } catch (error) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: `Error fetching GitHub templates: ${error instanceof Error ? error.message : 'Unknown error'}`,
+          },
+        ],
+        isError: true,
+      };
+    }
+  }
+);
+
 // Tool: List Available Templates
 server.tool(
   "list_templates",
   {},
   async () => {
     try {
+      const githubGitignores = await getAvailableGitignoreTemplates();
+      const githubLicenses = await getAvailableLicenseTemplates();
       const templates = {
         schemas: SCHEMA_TYPES.map(type => ({
           type,
           category: 'documentation',
           description: `Schema for ${type.replace('_', ' ')} documentation`
         })),
-        licenses: LICENSE_TYPES.map(type => ({
+        licenses: githubLicenses.map(type => ({
           type,
           category: 'license',
-          description: `${type} license template`
+          description: `${type} license template (from GitHub)`
         })),
-        gitignores: GITIGNORE_TYPES.map(type => ({
+        gitignores: githubGitignores.map(type => ({
           type,
           category: 'gitignore',
-          description: `${type} .gitignore template`
+          description: `${type} .gitignore template (from GitHub)`
         }))
       };
       
@@ -513,7 +701,8 @@ server.tool(
                 schemas: templates.schemas.length,
                 licenses: templates.licenses.length,
                 gitignores: templates.gitignores.length
-              }
+              },
+              note: "License and Gitignore templates are fetched from GitHub API repositories"
             }, null, 2),
           },
         ],

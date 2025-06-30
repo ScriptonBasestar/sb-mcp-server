@@ -1,14 +1,39 @@
 {
-  "name": "document-schema-server",
-  "version": "0.1.0",
-  "description": "MCP server for document schema validation and generation",
+  "name": "@archmagece/document-schema-mcp-server",
+  "version": "1.0.0",
+  "description": "MCP server for document schema validation and generation with GitHub API integration",
   "type": "module",
   "main": "build/index.js",
+  "bin": {
+    "document-schema-mcp-server": "build/index.js"
+  },
+  "files": [
+    "build/"
+  ],
   "scripts": {
     "build": "tsc && node -e \"require('fs').chmodSync('build/index.js', '755')\"",
     "dev": "tsc --watch",
-    "start": "node build/index.js"
+    "start": "node build/index.js",
+    "prepublishOnly": "npm run build"
   },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "document-schema",
+    "validation",
+    "github-api",
+    "license",
+    "gitignore",
+    "templates"
+  ],
+  "author": "ArchmageCore",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/archmagece/mcp-schema-specs.git",
+    "directory": "mcp-server"
+  },
+  "homepage": "https://github.com/archmagece/mcp-schema-specs",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
     "zod": "^3.22.4"

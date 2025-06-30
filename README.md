@@ -2,35 +2,57 @@
 
 A comprehensive collection of document schemas for standardizing project documentation across different types of software projects.
 
-## 리소스
+## ✨ Key Features
 
-- docs: ./schemas/docs/*
-- gitignore: https://github.com/orgs/github/gitignore
-- license: https://github.com/licenses/license-templates
-- 
+- **📋 Document Schema Collection** - 10+ schemas covering all aspects of project documentation
+- **🌐 GitHub API Integration** - 191 templates from official GitHub repositories
+- **🔍 Real-time Validation** - Automated document structure checking
+- **📦 NPX Ready** - Easy installation and execution via npx
+- **🤖 AI-Friendly** - Designed for seamless AI assistant integration
+- **⚡ Template Generation** - Instant creation of standardized documents
 
+## 🚀 Quick Start with NPX
 
-## 📋 Features
+```bash
+# Install and run the MCP server globally
+npx @archmagece/document-schema-mcp-server
 
-- **Comprehensive Schema Collection** - 11 different document schemas covering all aspects of project documentation
-- **Standardized Structure** - Consistent formatting and organization across all schema types
-- **AI-Friendly** - Designed to work seamlessly with AI assistants like Claude for automated documentation
-- **Best Practices** - Incorporates industry standards and proven documentation patterns
+# Generate a MIT license
+echo '{"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": "generate_license", "arguments": {"license_type": "mit", "author": "Your Name", "output_path": "LICENSE"}}}' | npx @archmagece/document-schema-mcp-server
+
+# Generate a Node.js .gitignore
+echo '{"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": "generate_gitignore", "arguments": {"gitignore_type": "Node", "output_path": ".gitignore"}}}' | npx @archmagece/document-schema-mcp-server
+
+# List all available templates
+echo '{"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": "list_templates", "arguments": {}}}' | npx @archmagece/document-schema-mcp-server
+```
+
+## 📋 GitHub API Integration
+
+### 🔄 Real-time Template Access
+- **License Templates**: 36 templates from [licenses/license-templates](https://github.com/licenses/license-templates)
+- **Gitignore Templates**: 155 templates from [github/gitignore](https://github.com/github/gitignore)
+- **Document Schemas**: 10 local schemas for project documentation
+
+### 🛡️ Fallback System
+- Primary: GitHub API for latest templates
+- Fallback: Local templates when API unavailable
+- Zero configuration required
 
 ## 📁 Schema Collection
 
 This project provides schemas for the following document types:
 
-- **[README](schemas/schema.readme.md)** - Project introduction and setup instructions
-- **[API Documentation](schemas/schema.api.md)** - Code interface documentation
-- **[Architecture](schemas/schema.architecture.md)** - System design and component structure
-- **[Features](schemas/schema.features.md)** - User-facing functionality descriptions
-- **[Tech Stack](schemas/schema.tech_stack.md)** - Technology choices and dependencies
-- **[TODO](schemas/schema.todo.md)** - Active development tasks and tracking
-- **[Backlog](schemas/schema.backlog.md)** - Future ideas and deferred features
-- **[Changelog](schemas/schema.changelog.md)** - Version history and changes
-- **[Contributing](schemas/schema.contributing.md)** - Contribution guidelines and setup
-- **[Prompts](schemas/schema.prompt.md)** - AI prompt templates and standards
+- **[README](schemas/docs/schema.readme.md)** - Project introduction and setup instructions
+- **[API Documentation](schemas/docs/schema.api.md)** - Code interface documentation
+- **[Architecture](schemas/docs/schema.architecture.md)** - System design and component structure
+- **[Features](schemas/docs/schema.features.md)** - User-facing functionality descriptions
+- **[Tech Stack](schemas/docs/schema.tech_stack.md)** - Technology choices and dependencies
+- **[TODO](schemas/docs/schema.todo.md)** - Active development tasks and tracking
+- **[Backlog](schemas/docs/schema.backlog.md)** - Future ideas and deferred features
+- **[Changelog](schemas/docs/schema.changelog.md)** - Version history and changes
+- **[Contributing](schemas/docs/schema.contributing.md)** - Contribution guidelines and setup
+- **[Prompts](schemas/docs/schema.prompt.md)** - AI prompt templates and standards
 
 ## 🚀 Usage
 
@@ -40,60 +62,86 @@ This project provides schemas for the following document types:
 3. Fill in the content according to the specified format
 
 ### With MCP Server (Recommended)
-Use our Model Context Protocol server for automated validation and generation:
+Use our Model Context Protocol server with 9 powerful tools:
 
+#### 🔧 Installation Options
 ```bash
-# Validate existing documentation
-validate_document README.md readme
+# Option 1: NPX (Recommended)
+npx @archmagece/document-schema-mcp-server
 
-# Generate new documentation templates
-generate_template features ./FEATURES.md
+# Option 2: Global Installation
+npm install -g @archmagece/document-schema-mcp-server
+document-schema-mcp-server
 
-# Analyze project documentation status
-analyze_project_docs ./
+# Option 3: Local Development
+git clone https://github.com/archmagece/mcp-schema-specs.git
+cd mcp-schema-specs/mcp-server
+npm install && npm run build && npm start
 ```
 
-## 🛠️ Development
+#### 🛠️ MCP Server Tools (9 Total)
 
-This project includes an MCP server implementation for seamless integration with AI assistants.
-
-### Setup
-```bash
-# Clone the repository
-git clone <repository-url>
-cd mcp-schema-specs
-
-# Install MCP server dependencies
-cd mcp-server
-npm install
-npm run build
-```
-
-### MCP Server Tools
+**📋 Document Tools:**
 - `validate_document` - Validate documents against schemas
 - `generate_template` - Create new document templates
+- `list_schemas` - List available document schemas
 - `analyze_project_docs` - Assess documentation completeness
-- `suggest_improvements` - Provide enhancement recommendations
+
+**📄 License Tools:**
+- `generate_license` - Generate license files (36+ templates from GitHub)
+- `list_license_templates` - List all available license templates
+
+**🚫 Gitignore Tools:**
+- `generate_gitignore` - Generate .gitignore files (155+ templates from GitHub)
+- `list_gitignore_templates` - List all available gitignore templates
+
+**📊 General Tools:**
+- `list_templates` - List all available templates (schemas + licenses + gitignores)
+
+#### 🔌 Claude Desktop Integration
+Add to your MCP settings (`claude_desktop_config.json`):
+```json
+{
+  "mcpServers": {
+    "document-schema-server": {
+      "command": "npx",
+      "args": ["@archmagece/document-schema-mcp-server"]
+    }
+  }
+}
+```
 
 ## 📂 File Structure
 
 ```
 mcp-schema-specs/
-├── schemas/                    # Document schema definitions
-│   ├── schema.readme.md       # README structure
-│   ├── schema.api.md          # API documentation
-│   ├── schema.architecture.md # Architecture documentation
-│   └── ...                    # Other schema files
+├── schemas/                    # Document and template specifications
+│   ├── docs/                   # Document schema definitions
+│   │   ├── schema.readme.md   # README structure
+│   │   ├── schema.api.md      # API documentation
+│   │   └── ...                # Other schema files
+│   └── templates/             # Local template fallbacks
+│       ├── licenses/          # License templates
+│       └── gitignore/         # Gitignore templates
 ├── mcp-server/                # MCP server implementation
-│   ├── src/                   # Server source code
-│   ├── package.json          # Dependencies and scripts
+│   ├── src/index.ts          # Server source code
+│   ├── package.json          # NPM package configuration
+│   ├── README.md             # Server documentation
 │   └── build/                # Compiled JavaScript
-└── README.md                  # This file
+└── README.md                  # Project overview
 ```
+
+## 📦 NPM Package
+
+The MCP server is published as `@archmagece/document-schema-mcp-server`:
+
+- **NPX Usage**: `npx @archmagece/document-schema-mcp-server`
+- **Global Install**: `npm install -g @archmagece/document-schema-mcp-server`
+- **Package URL**: https://www.npmjs.com/package/@archmagece/document-schema-mcp-server
 
 ## 🤝 Contributing
 
-Please read our [Contributing Guidelines](schemas/schema.contributing.md) for details on our code of conduct and the process for submitting pull requests.
+Please read our [Contributing Guidelines](schemas/docs/schema.contributing.md) for details on our code of conduct and the process for submitting pull requests.
 
 ## 📄 License
 

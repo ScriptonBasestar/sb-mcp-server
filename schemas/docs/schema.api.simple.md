@@ -1,4 +1,4 @@
-# schema.api.md
+# schema.api.simple.md
 
 This schema defines the expected structure of each `docs/api/*.md` file documenting code interfaces.
 

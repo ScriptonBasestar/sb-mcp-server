@@ -1,11 +1,11 @@
 {
-  "name": "@scriptonbasestar/sb-schema-mcp-server",
+  "name": "@scriptonbasestar/sb-schema-doc-server",
   "version": "1.0.0",
   "description": "MCP server for document schema validation and generation with GitHub API integration",
   "type": "module",
   "main": "build/index.js",
   "bin": {
-    "sb-schema-mcp-server": "build/index.js"
+    "sb-schema-doc-server": "build/index.js"
   },
   "files": [
     "build/"
@@ -31,7 +31,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/archmagece/sb-mcp-server.git",
-    "directory": "mcp-server"
+    "directory": "doc-server"
   },
   "homepage": "https://github.com/archmagece/sb-mcp-server",
   "dependencies": {

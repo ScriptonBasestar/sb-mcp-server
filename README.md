@@ -15,16 +15,16 @@ A comprehensive collection of document schemas for standardizing project documen
 
 ```bash
 # Install and run the MCP server globally
-npx @scriptonbasestar/sb-schema-mcp-server
+npx @scriptonbasestar/sb-schema-doc-server
 
 # Generate a MIT license
-echo '{"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": "generate_license", "arguments": {"license_type": "mit", "author": "Your Name", "output_path": "LICENSE"}}}' | npx @scriptonbasestar/sb-schema-mcp-server
+echo '{"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": "generate_license", "arguments": {"license_type": "mit", "author": "Your Name", "output_path": "LICENSE"}}}' | npx @scriptonbasestar/sb-schema-doc-server
 
 # Generate a Node.js .gitignore
-echo '{"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": "generate_gitignore", "arguments": {"gitignore_type": "Node", "output_path": ".gitignore"}}}' | npx @scriptonbasestar/sb-schema-mcp-server
+echo '{"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": "generate_gitignore", "arguments": {"gitignore_type": "Node", "output_path": ".gitignore"}}}' | npx @scriptonbasestar/sb-schema-doc-server
 
 # List all available templates
-echo '{"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": "list_templates", "arguments": {}}}' | npx @scriptonbasestar/sb-schema-mcp-server
+echo '{"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": "list_templates", "arguments": {}}}' | npx @scriptonbasestar/sb-schema-doc-server
 ```
 
 ## 📋 GitHub API Integration
@@ -67,15 +67,15 @@ Use our Model Context Protocol server with 9 powerful tools:
 #### 🔧 Installation Options
 ```bash
 # Option 1: NPX (Recommended)
-npx @scriptonbasestar/sb-schema-mcp-server
+npx @scriptonbasestar/sb-schema-doc-server
 
 # Option 2: Global Installation
-npm install -g @scriptonbasestar/sb-schema-mcp-server
-document-schema-mcp-server
+npm install -g @scriptonbasestar/sb-schema-doc-server
+document-schema-doc-server
 
 # Option 3: Local Development
 git clone https://github.com/archmagece/mcp-schema-specs.git
-cd mcp-schema-specs/mcp-server
+cd mcp-schema-specs/doc-server
 npm install && npm run build && npm start
 ```
 
@@ -105,7 +105,7 @@ Add to your MCP settings (`claude_desktop_config.json`):
   "mcpServers": {
     "sb-schema-server": {
       "command": "npx",
-      "args": ["@scriptonbasestar/sb-schema-mcp-server"]
+      "args": ["@scriptonbasestar/sb-schema-doc-server"]
     }
   }
 }
@@ -123,7 +123,7 @@ mcp-schema-specs/
 │   └── templates/             # Local template fallbacks
 │       ├── licenses/          # License templates
 │       └── gitignore/         # Gitignore templates
-├── mcp-server/                # MCP server implementation
+├── doc-server/                # MCP server implementation
 │   ├── src/index.ts          # Server source code
 │   ├── package.json          # NPM package configuration
 │   ├── README.md             # Server documentation
@@ -133,11 +133,11 @@ mcp-schema-specs/
 
 ## 📦 NPM Package
 
-The MCP server is published as `@scriptonbasestar/sb-schema-mcp-server`:
+The MCP server is published as `@scriptonbasestar/sb-schema-doc-server`:
 
-- **NPX Usage**: `npx @scriptonbasestar/sb-schema-mcp-server`
-- **Global Install**: `npm install -g @scriptonbasestar/sb-schema-mcp-server`
-- **Package URL**: https://www.npmjs.com/package/@scriptonbasestar/sb-schema-mcp-server
+- **NPX Usage**: `npx @scriptonbasestar/sb-schema-doc-server`
+- **Global Install**: `npm install -g @scriptonbasestar/sb-schema-doc-server`
+- **Package URL**: https://www.npmjs.com/package/@scriptonbasestar/sb-schema-doc-server
 
 ## 🤝 Contributing
 

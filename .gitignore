@@ -109,9 +109,16 @@ public
 .yarn/install-state.gz
 .pnp.*
 
-# MCP Server build output
-mcp-server/build/
-mcp-server/dist/
+# Svete build directory
+.svelte-kit/
+
+# sb-mcp-server
+doc-server/build/
+doc-server/dist/
+
+# Deno
+deno.lock
+/dist/
 
 # IDE files
 .vscode/

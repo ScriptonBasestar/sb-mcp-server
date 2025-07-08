@@ -21,12 +21,12 @@ You can use the server directly with `npx` without installation, or install it g
 
 ```bash
 # Option 1: Run directly with npx (Recommended)
-npx @scriptonbasestar/sb-schema-mcp-server
+npx @scriptonbasestar/sb-schema-doc-server
 
 # Option 2: Install globally with npm
-npm install -g @scriptonbasestar/sb-schema-mcp-server
+npm install -g @scriptonbasestar/sb-schema-doc-server
 # Then run the server with:
-sb-schema-mcp-server
+sb-schema-doc-server
 ```
 
 ### Examples
@@ -35,16 +35,16 @@ Here are some examples of how to interact with the server from your terminal.
 
 ```bash
 # Example 1: List all available gitignore templates
-echo '{"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": "list_gitignore_templates", "arguments": {}}}' | npx @scriptonbasestar/sb-schema-mcp-server
+echo '{"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": "list_gitignore_templates", "arguments": {}}}' | npx @scriptonbasestar/sb-schema-doc-server
 
 # Example 2: Generate a Node.js .gitignore file
-echo '{"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": "generate_gitignore", "arguments": {"gitignore_type": "Node", "output_path": ".gitignore"}}}' | npx @scriptonbasestar/sb-schema-mcp-server
+echo '{"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": "generate_gitignore", "arguments": {"gitignore_type": "Node", "output_path": ".gitignore"}}}' | npx @scriptonbasestar/sb-schema-doc-server
 
 # Example 3: Generate an MIT license
-echo '{"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": "generate_license", "arguments": {"license_type": "mit", "author": "Your Name", "output_path": "LICENSE"}}}' | npx @scriptonbasestar/sb-schema-mcp-server
+echo '{"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": "generate_license", "arguments": {"license_type": "mit", "author": "Your Name", "output_path": "LICENSE"}}}' | npx @scriptonbasestar/sb-schema-doc-server
 
 # Example 4: Validate a README document
-echo '{"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": "validate_document", "arguments": {"content": "# My Project\n\n## Usage", "schema_type": "readme"}}}' | npx @scriptonbasestar/sb-schema-mcp-server
+echo '{"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": "validate_document", "arguments": {"content": "# My Project\n\n## Usage", "schema_type": "readme"}}}' | npx @scriptonbasestar/sb-schema-doc-server
 ```
 
 ### Claude Desktop Integration
@@ -56,77 +56,18 @@ To integrate with Claude Desktop, add the following configuration to your MCP se
   "mcpServers": {
     "sb-schema-server": {
       "command": "npx",
-      "args": ["@scriptonbasestar/sb-schema-mcp-server"]
+      "args": ["@scriptonbasestar/sb-schema-doc-server"]
     }
   }
 }
 ```
 
-## 💻 Develop
+## 💻 Development & 📦 Deployment
 
-This section is for developers who want to modify the source code.
+For details on how to set up a development environment, modify the source code, and deploy your own version to npm, please see the following documents:
 
-### Prerequisites
-
-- Node.js >= 18.0.0
-- Git
-
-### Setup
-
-Clone the repository and install the dependencies.
-
-```bash
-# 1. Clone the repository
-git clone https://github.com/archmagece/sb-mcp-server.git
-
-# 2. Navigate to the server directory
-cd sb-mcp-server/mcp-server
-
-# 3. Install dependencies
-npm install
-```
-
-### Running in Development
-
-To build the project and watch for changes, run:
-
-```bash
-# Build the project and start the TypeScript compiler in watch mode
-npm run dev
-```
-
-In a separate terminal, you can run the server:
-
-```bash
-# Start the server
-npm start
-```
-This will execute the compiled JavaScript from the `build/` directory.
-
-## 📦 Deploy
-
-This section explains how to publish the package to the npm registry.
-
-### Prerequisites
-
-- You must have an npm account and be logged in on your machine (`npm login`).
-- To publish a scoped package for the first time, you might need to use `npm publish --access public`.
-
-### Publishing Steps
-
-The project includes a `prepublishOnly` script that automatically builds the project before publishing.
-
-```bash
-# 1. Navigate to the server directory
-cd mcp-server
-
-# 2. (Optional) Update the version number in package.json
-#    Example: npm version patch|minor|major
-npm version patch
-
-# 3. Publish to npm
-npm publish
-```
+- **[💻 Development Guide](../../docs/doc-server/develop.md)**
+- **[📦 Deployment Guide](../../docs/doc-server/deploy.md)**
 
 ## 🛠️ MCP Tools Reference
 

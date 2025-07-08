@@ -5,11 +5,12 @@ import { z } from "zod";
 import { readFileSync, existsSync, readdirSync, writeFileSync } from "fs";
 import { join, dirname, resolve } from "path";
 import { fileURLToPath } from "url";
+import { ZodError } from 'zod';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-// Get the project root directory (parent of mcp-server)
+// Get the project root directory (parent of doc-server)
 const PROJECT_ROOT = resolve(__dirname, '../../');
 const SCHEMAS_DIR = join(PROJECT_ROOT, 'schemas', 'docs');
 
